@@ -16,6 +16,7 @@
       --red: #ed0502;
       --radius: 20px;
       --shadow: 0 10px 30px rgba(0,0,0,0.25);
+      --green: #22c55e;
     }
 
     * { box-sizing: border-box; }
@@ -28,28 +29,25 @@
       color: var(--text);
     }
 
-   body {
-  min-height: 100vh;
-  display: flex;
-  align-items: flex-start;
-  justify-content: flex-start;
-  padding: 20px;
-}
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 20px;
+    }
 
-.overlay-body {
-  padding: 0;
-}
+    .overlay-body {
+      padding: 0;
+    }
 
-   .wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  width: 360px;
-}
-
-.hidden-for-overlay {
-  width: 260px;
-}
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 360px;
+      position: relative;
+    }
 
     .title {
       font-size: 26px;
@@ -64,18 +62,14 @@
       gap: 12px;
     }
 
-   .card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 16px 18px;
-  backdrop-filter: blur(8px);
-}
-
-.hidden-for-overlay .card {
-  padding: 12px 14px;
-}
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      backdrop-filter: blur(8px);
+    }
 
     .label {
       font-size: 13px;
@@ -86,18 +80,20 @@
       margin-bottom: 8px;
     }
 
-   .value {
-  font-size: 42px;
-  font-weight: 900;
-  line-height: 1;
-}
-
-.hidden-for-overlay .value {
-  font-size: 34px;
-}
+    .value {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+      transition: transform .22s ease, filter .22s ease, opacity .22s ease;
+    }
 
     .sar .value { color: var(--gold); }
     .godpack .value { color: var(--red); }
+
+    .value.bump {
+      transform: scale(1.08);
+      filter: brightness(1.2);
+    }
 
     .controls {
       display: flex;
@@ -126,24 +122,170 @@
       border: 1px solid rgba(255,255,255,0.16);
     }
 
+    button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
     .small {
       font-size: 12px;
       color: var(--muted);
       margin-top: 4px;
+      line-height: 1.4;
     }
 
-   .hidden-for-overlay #controlPanel,
-.hidden-for-overlay .title {
-  display: none;
-}
+    .statusLine {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
 
-    .hidden-for-overlay {
-  width: 100%;
-}
+    .pull-hall-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-.hidden-for-overlay body {
-  padding: 0;
-}
+    .pull-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.08);
+      min-height: 44px;
+    }
+
+    .pull-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .pull-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 64px;
+      height: 28px;
+      padding: 0 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 900;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .pull-badge.sar {
+      background: var(--gold);
+      color: #101010;
+    }
+
+    .pull-badge.godpack {
+      background: var(--red);
+    }
+
+    .pull-text {
+      font-size: 13px;
+      font-weight: 700;
+      color: #fff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .pull-time {
+      font-size: 11px;
+      color: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .empty-hall {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .overlay .title,
+    .overlay #controlPanel,
+    .overlay .statusLine.controller-only {
+      display: none;
+    }
+
+    .overlay .wrap {
+      width: 300px;
+      gap: 10px;
+    }
+
+    .overlay .card {
+      padding: 12px 14px;
+    }
+
+    .overlay .value {
+      font-size: 34px;
+    }
+
+    .overlay .pull-item {
+      min-height: 38px;
+      padding: 8px 10px;
+    }
+
+    .overlay .pull-badge {
+      min-width: 56px;
+      height: 24px;
+      font-size: 11px;
+    }
+
+    .overlay .pull-text {
+      font-size: 12px;
+    }
+
+    .overlay .pull-time {
+      font-size: 10px;
+    }
+
+    .event-banner {
+      position: fixed;
+      left: 50%;
+      bottom: 34px;
+      transform: translateX(-50%) translateY(22px);
+      opacity: 0;
+      pointer-events: none;
+      padding: 14px 20px;
+      border-radius: 16px;
+      font-size: 24px;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: #fff;
+      box-shadow: 0 16px 44px rgba(0,0,0,0.36);
+      transition: opacity .28s ease, transform .28s ease;
+      z-index: 999;
+      white-space: nowrap;
+    }
+
+    .event-banner.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .event-banner.pack {
+      background: rgba(6,54,146,0.92);
+    }
+
+    .event-banner.sar {
+      background: rgba(233,168,70,0.96);
+      color: #101010;
+    }
+
+    .event-banner.godpack {
+      background: rgba(237,5,2,0.96);
+    }
+
+    .event-banner.reset {
+      background: rgba(255,255,255,0.18);
+    }
   </style>
 </head>
 <body>
@@ -160,6 +302,11 @@
         <div class="label">Godpack seit</div>
         <div class="value" id="godpackCount">0</div>
       </div>
+
+      <div class="card">
+        <div class="label">Pull Hall</div>
+        <div id="pullHall" class="pull-hall-list"></div>
+      </div>
     </div>
 
     <div class="card" id="controlPanel">
@@ -173,16 +320,44 @@
       <div class="small">
         Hotkeys: 1 = +1 Pack, 2 = SAR Reset, 3 = Godpack Reset, 0 = Alles resetten
       </div>
+      <div class="statusLine controller-only" id="statusLine">Verbinde mit Firebase...</div>
     </div>
   </div>
 
-  <script>
+  <div id="eventBanner" class="event-banner"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+    import {
+      getDatabase,
+      ref,
+      get,
+      onValue,
+      runTransaction,
+      update
+    } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyA5kq-HiCkVroQLCwwVc24C8XYPJTZvegM",
+      authDomain: "queue-tracker-3fa3c.firebaseapp.com",
+      databaseURL: "https://queue-tracker-3fa3c-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId: "queue-tracker-3fa3c",
+      storageBucket: "queue-tracker-3fa3c.firebasestorage.app",
+      messagingSenderId: "132132188124",
+      appId: "1:132132188124:web:ecc130f7ee7ac9d61be919",
+      measurementId: "G-3QBWJHGDXG"
+    };
+
     const params = new URLSearchParams(window.location.search);
     const overlayMode = params.get("view") === "overlay";
+    const hotkeysEnabled = params.get("hotkeys") !== "off";
 
-    const app = document.getElementById("app");
+    const appEl = document.getElementById("app");
     const sarEl = document.getElementById("sarCount");
     const godpackEl = document.getElementById("godpackCount");
+    const pullHallEl = document.getElementById("pullHall");
+    const statusLineEl = document.getElementById("statusLine");
+    const eventBannerEl = document.getElementById("eventBanner");
 
     const plusOneBtn = document.getElementById("plusOne");
     const sarResetBtn = document.getElementById("sarReset");
@@ -190,43 +365,210 @@
     const resetAllBtn = document.getElementById("resetAll");
 
     if (overlayMode) {
-  app.classList.add("hidden-for-overlay");
-  document.body.classList.add("overlay-body");
-}
-
-    function getCount(key) {
-      return parseInt(localStorage.getItem(key) || "0", 10);
+      appEl.classList.add("overlay");
+      document.body.classList.add("overlay-body");
     }
 
-    function setCount(key, value) {
-      localStorage.setItem(key, String(value));
+    const firebaseApp = initializeApp(firebaseConfig);
+    const db = getDatabase(firebaseApp);
+    const stateRef = ref(db, "pullCounter/state");
+
+    const initialState = {
+      sarCount: 0,
+      godpackCount: 0,
+      pullHall: [],
+      lastActionId: "",
+      lastActionType: "",
+      updatedAt: 0
+    };
+
+    let currentState = { ...initialState };
+    let lastSeenActionId = "";
+    let bannerTimeout = null;
+
+    function setStatus(text) {
+      if (statusLineEl) statusLineEl.textContent = text;
     }
 
-    function render() {
-      sarEl.textContent = getCount("sarCount");
-      godpackEl.textContent = getCount("godpackCount");
+    function setButtonsDisabled(disabled) {
+      if (plusOneBtn) plusOneBtn.disabled = disabled;
+      if (sarResetBtn) sarResetBtn.disabled = disabled;
+      if (godpackResetBtn) godpackResetBtn.disabled = disabled;
+      if (resetAllBtn) resetAllBtn.disabled = disabled;
     }
 
-    function plusOne() {
-      setCount("sarCount", getCount("sarCount") + 1);
-      setCount("godpackCount", getCount("godpackCount") + 1);
-      render();
+    function makeActionId(prefix) {
+      return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 9)}`;
     }
 
-    function sarReset() {
-      setCount("sarCount", 0);
-      render();
+    function formatTime(timestamp) {
+      if (!timestamp) return "";
+      const d = new Date(timestamp);
+      return d.toLocaleTimeString("de-DE", {
+        hour: "2-digit",
+        minute: "2-digit"
+      });
     }
 
-    function godpackReset() {
-      setCount("godpackCount", 0);
-      render();
+    function renderCounts() {
+      sarEl.textContent = String(currentState.sarCount || 0);
+      godpackEl.textContent = String(currentState.godpackCount || 0);
     }
 
-    function resetAll() {
-      setCount("sarCount", 0);
-      setCount("godpackCount", 0);
-      render();
+    function renderPullHall() {
+      const hall = Array.isArray(currentState.pullHall) ? currentState.pullHall : [];
+
+      if (!hall.length) {
+        pullHallEl.innerHTML = `<div class="empty-hall">Noch keine Pulls gespeichert</div>`;
+        return;
+      }
+
+      pullHallEl.innerHTML = hall.map(item => {
+        const typeClass = item.type === "SAR" ? "sar" : "godpack";
+        const label = item.type === "SAR" ? "SAR" : "Godpack";
+        return `
+          <div class="pull-item">
+            <div class="pull-left">
+              <div class="pull-badge ${typeClass}">${label}</div>
+              <div class="pull-text">${item.text || (label + " gezogen")}</div>
+            </div>
+            <div class="pull-time">${formatTime(item.at)}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function bumpValue(el) {
+      if (!el) return;
+      el.classList.remove("bump");
+      void el.offsetWidth;
+      el.classList.add("bump");
+      setTimeout(() => el.classList.remove("bump"), 260);
+    }
+
+    function showBanner(type, text) {
+      if (!overlayMode) return;
+
+      if (bannerTimeout) {
+        clearTimeout(bannerTimeout);
+        bannerTimeout = null;
+      }
+
+      eventBannerEl.className = `event-banner ${type}`;
+      eventBannerEl.textContent = text;
+      requestAnimationFrame(() => {
+        eventBannerEl.classList.add("show");
+      });
+
+      bannerTimeout = setTimeout(() => {
+        eventBannerEl.classList.remove("show");
+      }, 1800);
+    }
+
+    function handleActionAnimation(prevState, nextState) {
+      const actionType = nextState.lastActionType || "";
+
+      if (actionType === "pack") {
+        bumpValue(sarEl);
+        bumpValue(godpackEl);
+        showBanner("pack", "+1 Pack");
+        return;
+      }
+
+      if (actionType === "sar") {
+        bumpValue(sarEl);
+        showBanner("sar", "SAR gezogen");
+        return;
+      }
+
+      if (actionType === "godpack") {
+        bumpValue(godpackEl);
+        showBanner("godpack", "Godpack gezogen");
+        return;
+      }
+
+      if (actionType === "reset") {
+        bumpValue(sarEl);
+        bumpValue(godpackEl);
+        showBanner("reset", "Counter zurückgesetzt");
+      }
+    }
+
+    function renderAll() {
+      renderCounts();
+      renderPullHall();
+    }
+
+    async function ensureStateExists() {
+      const snapshot = await get(stateRef);
+      if (!snapshot.exists()) {
+        await update(stateRef, initialState);
+      }
+    }
+
+    async function plusOne() {
+      await runTransaction(stateRef, state => {
+        const base = { ...initialState, ...(state || {}) };
+        return {
+          ...base,
+          sarCount: Number(base.sarCount || 0) + 1,
+          godpackCount: Number(base.godpackCount || 0) + 1,
+          lastActionType: "pack",
+          lastActionId: makeActionId("pack"),
+          updatedAt: Date.now()
+        };
+      });
+    }
+
+    async function sarReset() {
+      await runTransaction(stateRef, state => {
+        const base = { ...initialState, ...(state || {}) };
+        const hall = Array.isArray(base.pullHall) ? base.pullHall.slice(0, 3) : [];
+        hall.unshift({
+          type: "SAR",
+          text: "SAR gezogen",
+          at: Date.now()
+        });
+
+        return {
+          ...base,
+          sarCount: 0,
+          pullHall: hall.slice(0, 3),
+          lastActionType: "sar",
+          lastActionId: makeActionId("sar"),
+          updatedAt: Date.now()
+        };
+      });
+    }
+
+    async function godpackReset() {
+      await runTransaction(stateRef, state => {
+        const base = { ...initialState, ...(state || {}) };
+        const hall = Array.isArray(base.pullHall) ? base.pullHall.slice(0, 3) : [];
+        hall.unshift({
+          type: "GODPACK",
+          text: "Godpack gezogen",
+          at: Date.now()
+        });
+
+        return {
+          ...base,
+          godpackCount: 0,
+          pullHall: hall.slice(0, 3),
+          lastActionType: "godpack",
+          lastActionId: makeActionId("godpack"),
+          updatedAt: Date.now()
+        };
+      });
+    }
+
+    async function resetAll() {
+      await update(stateRef, {
+        ...initialState,
+        lastActionType: "reset",
+        lastActionId: makeActionId("reset"),
+        updatedAt: Date.now()
+      });
     }
 
     plusOneBtn?.addEventListener("click", plusOne);
@@ -235,7 +577,11 @@
     resetAllBtn?.addEventListener("click", resetAll);
 
     document.addEventListener("keydown", (e) => {
-      if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+      if (!hotkeysEnabled) return;
+      if (overlayMode) return;
+
+      const activeTag = document.activeElement?.tagName || "";
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(activeTag)) return;
 
       if (e.key === "1") plusOne();
       if (e.key === "2") sarReset();
@@ -243,8 +589,36 @@
       if (e.key === "0") resetAll();
     });
 
-    window.addEventListener("storage", render);
-    render();
+    setButtonsDisabled(true);
+    setStatus("Verbinde mit Firebase...");
+
+    try {
+      await ensureStateExists();
+
+      onValue(stateRef, (snapshot) => {
+        const nextState = { ...initialState, ...(snapshot.val() || {}) };
+        const prevState = { ...currentState };
+        currentState = nextState;
+
+        renderAll();
+
+        if (nextState.lastActionId && nextState.lastActionId !== lastSeenActionId) {
+          lastSeenActionId = nextState.lastActionId;
+          handleActionAnimation(prevState, nextState);
+        }
+
+        setButtonsDisabled(false);
+        setStatus(hotkeysEnabled ? "Live verbunden. Hotkeys aktiv." : "Live verbunden.");
+      }, (error) => {
+        console.error(error);
+        setButtonsDisabled(true);
+        setStatus("Firebase Fehler");
+      });
+    } catch (error) {
+      console.error(error);
+      setButtonsDisabled(true);
+      setStatus("Firebase Zugriff fehlgeschlagen");
+    }
   </script>
 </body>
 </html>
