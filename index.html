@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ChiefCards Pull Counter</title>
+  <style>
+    :root{
+      --bg: rgba(0,0,0,0);
+      --card: rgba(8,18,42,0.78);
+      --border: rgba(255,255,255,0.14);
+      --text: #ffffff;
+      --muted: rgba(255,255,255,0.75);
+      --blue: #063692;
+      --gold: #e9a846;
+      --red: #ed0502;
+      --radius: 20px;
+      --shadow: 0 10px 30px rgba(0,0,0,0.25);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: transparent;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+    }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: flex-start;
+      padding: 20px;
+    }
+
+    .wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      width: 360px;
+    }
+
+    .title {
+      font-size: 26px;
+      font-weight: 800;
+      line-height: 1;
+      color: var(--text);
+      text-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    }
+
+    .grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px 18px;
+      backdrop-filter: blur(8px);
+    }
+
+    .label {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 42px;
+      font-weight: 900;
+      line-height: 1;
+    }
+
+    .sar .value { color: var(--gold); }
+    .godpack .value { color: var(--red); }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 6px;
+    }
+
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 14px;
+      padding: 12px 14px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      color: white;
+      background: var(--blue);
+      box-shadow: var(--shadow);
+    }
+
+    button.alt { background: var(--gold); color: #101010; }
+    button.warn { background: var(--red); }
+    button.ghost {
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.16);
+    }
+
+    .small {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .hidden-for-overlay .controls,
+    .hidden-for-overlay .small {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap" id="app">
+    <div class="title">ChiefCards Pull Counter</div>
+
+    <div class="grid">
+      <div class="card sar">
+        <div class="label">SAR seit</div>
+        <div class="value" id="sarCount">0</div>
+      </div>
+
+      <div class="card godpack">
+        <div class="label">Godpack seit</div>
+        <div class="value" id="godpackCount">0</div>
+      </div>
+    </div>
+
+    <div class="card" id="controlPanel">
+      <div class="label">Steuerung</div>
+      <div class="controls">
+        <button id="plusOne">+1 Pack</button>
+        <button id="sarReset" class="alt">SAR gezogen</button>
+        <button id="godpackReset" class="warn">Godpack gezogen</button>
+        <button id="resetAll" class="ghost">Alles zurücksetzen</button>
+      </div>
+      <div class="small">
+        Hotkeys: 1 = +1 Pack, 2 = SAR Reset, 3 = Godpack Reset, 0 = Alles resetten
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const overlayMode = params.get("view") === "overlay";
+
+    const app = document.getElementById("app");
+    const sarEl = document.getElementById("sarCount");
+    const godpackEl = document.getElementById("godpackCount");
+
+    const plusOneBtn = document.getElementById("plusOne");
+    const sarResetBtn = document.getElementById("sarReset");
+    const godpackResetBtn = document.getElementById("godpackReset");
+    const resetAllBtn = document.getElementById("resetAll");
+
+    if (overlayMode) {
+      app.classList.add("hidden-for-overlay");
+    }
+
+    function getCount(key) {
+      return parseInt(localStorage.getItem(key) || "0", 10);
+    }
+
+    function setCount(key, value) {
+      localStorage.setItem(key, String(value));
+    }
+
+    function render() {
+      sarEl.textContent = getCount("sarCount");
+      godpackEl.textContent = getCount("godpackCount");
+    }
+
+    function plusOne() {
+      setCount("sarCount", getCount("sarCount") + 1);
+      setCount("godpackCount", getCount("godpackCount") + 1);
+      render();
+    }
+
+    function sarReset() {
+      setCount("sarCount", 0);
+      render();
+    }
+
+    function godpackReset() {
+      setCount("godpackCount", 0);
+      render();
+    }
+
+    function resetAll() {
+      setCount("sarCount", 0);
+      setCount("godpackCount", 0);
+      render();
+    }
+
+    plusOneBtn?.addEventListener("click", plusOne);
+    sarResetBtn?.addEventListener("click", sarReset);
+    godpackResetBtn?.addEventListener("click", godpackReset);
+    resetAllBtn?.addEventListener("click", resetAll);
+
+    document.addEventListener("keydown", (e) => {
+      if (["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) return;
+
+      if (e.key === "1") plusOne();
+      if (e.key === "2") sarReset();
+      if (e.key === "3") godpackReset();
+      if (e.key === "0") resetAll();
+    });
+
+    window.addEventListener("storage", render);
+    render();
+  </script>
+</body>
+</html>
